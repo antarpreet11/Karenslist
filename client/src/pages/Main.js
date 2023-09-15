@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router';
 import { UserContext } from '../App'
 import Map from '../components/Map'
@@ -7,6 +7,7 @@ import './Main.css'
 
 const Main = () => {
     const { user, setUser } = useContext(UserContext);
+    const [currLocation, setCurrLocation] = useState(null);
     const navigate = useNavigate();
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_MAPSKEY,
@@ -21,6 +22,13 @@ const Main = () => {
         if(!user) {
             console.log("Navigating to signup")
             navigate("/signup");
+        } else {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCurrLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                })
+            })
         }
     }, [user])
 
@@ -32,8 +40,8 @@ const Main = () => {
                 <div onClick={HandleLogout}>Logout</div>
             </div>
             {
-                !isLoaded ? <div>Loading...</div> :
-                <Map />
+                !isLoaded || !currLocation ? <div>Loading...</div> :
+                <Map location={currLocation}/>
             }
         </div>
     )

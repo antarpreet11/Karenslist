@@ -5,9 +5,9 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocom
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox'
 import '@reach/combobox/styles.css'
 
-const Map = () => {
+const Map = (props) => {
 
-  const center = useMemo(() => ( {lat: 44, lng: -80} ), [])
+  const center = useMemo(() => ( props.location ), [])
   const [selected, setSelected] = useState(null)
 
   return (
@@ -15,7 +15,7 @@ const Map = () => {
       <div className="places-container">
         <PlacesAutocomplete setSelected={setSelected}/>
       </div>
-      <GoogleMap zoom={10} center={center} mapContainerClassName='map-container'>
+      <GoogleMap zoom={13} center={center} mapContainerClassName='map-container'>
         {selected && <Marker position={selected} />}
       </GoogleMap>
     </>
