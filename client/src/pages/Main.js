@@ -9,7 +9,8 @@ const Main = () => {
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const { isLoaded } = useJsApiLoader({
-        googleMapsApiKey: process.env.REACT_APP_MAPSKEY
+        googleMapsApiKey: process.env.REACT_APP_MAPSKEY,
+        libraries: ['places']
     })
 
     const HandleLogout = () => {
