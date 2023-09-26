@@ -4,10 +4,11 @@ import { GoogleMap, Marker } from '@react-google-maps/api'
 import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocomplete'
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox'
 import '@reach/combobox/styles.css'
+import sampleData from '../data/SampleMarkers'
 
 const Map = (props) => {
 
-  const center = useMemo(() => ( props.location ), [])
+  const center = useMemo(() => ( props.location ), [props.location])
   const [selected, setSelected] = useState(null)
 
   return (
