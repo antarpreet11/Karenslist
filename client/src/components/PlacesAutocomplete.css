@@ -1,4 +1,8 @@
 .combobox-input {
     width: 100%;
-    padding: 0.5rem;
+    height: 1.4rem;
+    padding: 0.5rem 0.7rem;
+    background-color: #F2AFEF;
+    border: none;
+    border-radius: 5px;
 }

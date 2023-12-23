@@ -17,7 +17,7 @@ const Main = () => {
     const HandleProfile = () => {
         navigate("/profile");
     }
-    
+
     const HandleLogout = () => {
         setUser(null);
     }
@@ -39,8 +39,8 @@ const Main = () => {
     return (
         <div className='main-page'>
             <div className='header'>
-                <div onClick={HandleProfile}>Welcome {user?.name}</div>
-                <div onClick={HandleLogout}>Logout</div>
+                <div onClick={HandleProfile} style={{cursor: 'pointer'}}>Welcome {user?.name}</div>
+                <div onClick={HandleLogout} style={{cursor: 'pointer'}}>Logout</div>
             </div>
             {
                 !isLoaded || !currLocation ? <div>Loading...</div> :

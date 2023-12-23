@@ -96,8 +96,6 @@ async def create_review(review: ReviewBase, db: db_dependency):
 
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with email: {review.email} not found")
-    elif db_user.sub != review.sub:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User with email: {review.email} not authorized to post review")
     
     db_review = models.Review(email=review.email, address=review.address, title=review.title, complaint=review.complaint, latitude=review.latitude, longitude=review.longitude)
     db.add(db_review)
