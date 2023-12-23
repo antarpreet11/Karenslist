@@ -13,4 +13,74 @@
 
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 35px;
+}
+
+.add-button {
+    padding: 6px 10px;
+    background-color: #33186B;
+    color: #F2AFEF;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-drawer {
+    .MuiPaper-root {
+        height: 70vh !important;
+        max-height: 90vh !important;
+        width: 100% !important;
+        background-color: #C499F3 !important;
+    }
+}
+
+.drawer-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 50px 30px;
+}
+
+.drawer-upper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    height: 70%;
+    font-size: 1.1rem;
+}
+
+.drawer-title {
+    font-family: 'Lexend Deca', sans-serif;
+    font-size: 2rem;
+}
+
+.drawer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    width: 500px !important;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.form-button {
+    width: 40%;
+}
+
+.submit-response {
+    font-size: 0.8rem;
+    color: #33186B;
+    align-self: flex-end;
 }

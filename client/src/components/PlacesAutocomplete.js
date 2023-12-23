@@ -2,7 +2,7 @@ import usePlacesAutocomplete, { getGeocode, getLatLng } from 'use-places-autocom
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox'
 import './PlacesAutocomplete.css'
 
-const PlacesAutocomplete = ({ setSelected }) => {
+const PlacesAutocomplete = ({ setSelected, setAddress }) => {
     const {
         ready,
         value,
@@ -18,6 +18,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
         const results = await getGeocode({ address })
         const {lat, lng} = await getLatLng(results[0])
         setSelected({lat, lng});
+        setAddress(address);
     }
 
     return (

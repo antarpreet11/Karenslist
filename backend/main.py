@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, status, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Annotated
 import models
@@ -6,6 +7,15 @@ from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 
 app = FastAPI()
+origins = [
+    "http://localhost:3000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_methods=["*"],
+)
+
 models.Base.metadata.create_all(bind=engine)
 
 class UserBase(BaseModel):
@@ -86,8 +96,6 @@ async def create_review(review: ReviewBase, db: db_dependency):
 
     if db_user is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with email: {review.email} not found")
-    elif db_user.sub != review.sub:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User with email: {review.email} not authorized to post review")
     
     db_review = models.Review(email=review.email, address=review.address, title=review.title, complaint=review.complaint, latitude=review.latitude, longitude=review.longitude)
     db.add(db_review)
