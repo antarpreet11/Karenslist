@@ -9,8 +9,8 @@ class User(Base):
     name = Column(String(255))
     sub = Column(String(255), unique=True)
 
-class Item(Base):
-    __tablename__ = "items"
+class Review(Base):
+    __tablename__ = "reviews"
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255))  

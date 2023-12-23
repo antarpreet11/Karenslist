@@ -17,6 +17,10 @@ const Signup = () => {
         navigate("/");
     };
 
+    const checkIfUserExits = async () => {
+        return true;
+    }
+
     useEffect(() => {
         /* global google */
         google.accounts.id.initialize({

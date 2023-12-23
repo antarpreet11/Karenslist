@@ -13,8 +13,9 @@ class UserBase(BaseModel):
     name: str = Field(min_length=1 , max_length=255)
     sub: str = Field()
 
-class ItemBase(BaseModel):
+class ReviewBase(BaseModel):
     email: str = Field(min_length=1, max_length=255)
+    sub: str = Field(min_length=1, max_length=255)
     address: str = Field(min_length=1, max_length=512)
     title: str = Field(min_length=1, max_length=512)
     complaint: str = Field(min_length=1, max_length=1024)
@@ -77,61 +78,72 @@ async def delete_user(email, db: db_dependency):
 
 
 
-# CRUD for items
+# CRUD for reviews
 # CREATE   
-@app.post("/items/", status_code=status.HTTP_201_CREATED)
-async def create_item(item: ItemBase, db: db_dependency):
-    db_user = db.query(models.User).filter(models.User.email == item.email).first()
+@app.post("/reviews/", status_code=status.HTTP_201_CREATED)
+async def create_review(review: ReviewBase, db: db_dependency):
+    db_user = db.query(models.User).filter(models.User.email == review.email).first()
 
     if db_user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with email: {item.email} not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with email: {review.email} not found")
+    elif db_user.sub != review.sub:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User with email: {review.email} not authorized to post review")
     
-    db_item = models.Item(email=item.email, address=item.address, title=item.title, complaint=item.complaint, latitude=item.latitude, longitude=item.longitude)
-    db.add(db_item)
+    db_review = models.Review(email=review.email, address=review.address, title=review.title, complaint=review.complaint, latitude=review.latitude, longitude=review.longitude)
+    db.add(db_review)
     db.commit()
 
 # READ
-@app.get("/items/", status_code=status.HTTP_200_OK)
-async def read_all_items(db: db_dependency):
-    items = db.query(models.Item).all()
-    if items == []: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No items found")
-    return items
+@app.get("/reviews/", status_code=status.HTTP_200_OK)
+async def read_all_reviews(db: db_dependency):
+    reviews = db.query(models.Review).all()
+    if reviews == []: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No reviews found")
+    return reviews
 
 # READ by email
-@app.get("/items/{email}/", status_code=status.HTTP_200_OK)
-async def read_user_items(email, db: db_dependency):
-    items = db.query(models.Item).filter(models.Item.email == email).all()
-    if items == []: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No items from email: {email} not found")
-    return items
+@app.get("/reviews/{email}/", status_code=status.HTTP_200_OK)
+async def read_user_reviews(email, db: db_dependency):
+    reviews = db.query(models.Review).filter(models.Review.email == email).all()
+    if reviews == []: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No reviews from email: {email} not found")
+    return reviews
 
 # READ by id
-@app.get("/item/{item_id}/", status_code=status.HTTP_200_OK)
-async def read_item(item_id: int, db: db_dependency):
-    item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if item is None: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item with id: {item_id} not found")
-    return item
+@app.get("/review/{review_id}/", status_code=status.HTTP_200_OK)
+async def read_review(review_id: int, db: db_dependency):
+    review = db.query(models.Review).filter(models.Review.id == review_id).first()
+    if review is None: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Review with id: {review_id} not found")
+    return review
 
 # UPDATE by id
-@app.put("/item/{item_id}/", status_code=status.HTTP_200_OK)
-async def update_item(item_id: int, item: ItemBase, db: db_dependency):
-    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if db_item is None: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item with id: {item_id} not found")
+@app.put("/review/{review_id}/", status_code=status.HTTP_200_OK)
+async def update_review(review_id: int, review: ReviewBase, db: db_dependency):
+    db_review = db.query(models.Review).filter(models.Review.id == review_id).first()
+    if db_review is None: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Review with id: {review_id} not found")
+    
+    db_user = db.query(models.User).filter(models.User.email == review.email).first()
+    if db_user is None or db_user.sub != review.sub:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User with email: {review.email} not authorized to update review")
     
     # Only the fields below can be updated
-    db_item.title = item.title
-    db_item.complaint = item.complaint
+    db_review.title = review.title
+    db_review.complaint = review.complaint
 
     db.commit()
 
 # DELETE by id 
-@app.delete("/item/{item_id}/", status_code=status.HTTP_200_OK)
-async def delete_item(item_id: int, db: db_dependency):
-    item = db.query(models.Item).filter(models.Item.id == item_id).first()
-    if item is None: 
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Item with id: {item_id} not found")
-    db.delete(item)
+@app.delete("/review/{review_id}/", status_code=status.HTTP_200_OK)
+async def delete_review(review_id: int, db: db_dependency):
+    review = db.query(models.Review).filter(models.Review.id == review_id).first()
+    if review is None: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Review with id: {review_id} not found")
+    
+    db_user = db.query(models.User).filter(models.User.email == review.email).first()
+    if db_user is None or db_user.sub != review.sub:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"User with email: {review.email} not authorized to delete review")
+
+    db.delete(review)
     db.commit()
