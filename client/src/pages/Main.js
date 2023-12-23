@@ -14,6 +14,10 @@ const Main = () => {
         libraries: ['places']
     })
 
+    const HandleProfile = () => {
+        navigate("/profile");
+    }
+    
     const HandleLogout = () => {
         setUser(null);
     }
@@ -32,11 +36,10 @@ const Main = () => {
         }
     }, [user])
 
-
     return (
         <div className='main-page'>
             <div className='header'>
-                <div>Welcome {user?.name}</div>
+                <div onClick={HandleProfile}>Welcome {user?.name}</div>
                 <div onClick={HandleLogout}>Logout</div>
             </div>
             {
