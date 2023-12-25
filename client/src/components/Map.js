@@ -37,8 +37,8 @@ const Map = (props) => {
           longitude: selected.lng
       }
       ).then((api_res) => {
-          console.log("Review created")
-          console.log(api_res)
+          console.log(api_res.status)
+          console.log(api_res.statusText)
           if (api_res.statusText === "Created") {
             setSubmitResponse("Review created successfully!")
           }
@@ -74,37 +74,42 @@ const Map = (props) => {
       </GoogleMap>
       <Drawer open={drawerOpen} onClose={toggleDrawer} anchor="bottom" className="add-drawer">
         <div className='drawer-body'>
-          <div className='drawer-upper'>
-            <div className='drawer-title'>Add Review</div>
-            <div>Confirm Address: {address}</div>
-            <form className='drawer-form' onSubmit={handleSubmit}>
-                <TextField
-                  id="title"
-                  multiline
-                  maxRows={4}
-                  label="Title"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                  inputProps={{ maxLength: 512 }}
-                />
-                <TextField
-                  id="review"
-                  multiline
-                  maxRows={6}
-                  label="Review"
-                  value={review}
-                  onChange={e => setReview(e.target.value)}
-                  inputProps={{ maxLength: 1024 }}
-                />
-                <div className="form-buttons">
-                  <Button variant="contained" className="form-button" color="error" onClick={toggleDrawer}>Cancel</Button>
-                  <Button variant="contained" className="form-button" type="submit">Submit</Button>
-                </div>
-                {
-                  submitResponse && <div className='submit-response'>{submitResponse}</div>
-                }
-            </form>
-          </div>
+          {
+            address ? 
+              <div className='drawer-upper'>
+                <div className='drawer-title'>Add Review</div>
+                <div>Confirm Address: {address}</div>
+                <form className='drawer-form' onSubmit={handleSubmit}>
+                    <TextField
+                      id="title"
+                      multiline
+                      maxRows={4}
+                      label="Title"
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      inputProps={{ maxLength: 512 }}
+                    />
+                    <TextField
+                      id="review"
+                      multiline
+                      maxRows={6}
+                      label="Review"
+                      value={review}
+                      onChange={e => setReview(e.target.value)}
+                      inputProps={{ maxLength: 1024 }}
+                    />
+                    <div className="form-buttons">
+                      <Button variant="contained" className="form-button" color="error" onClick={toggleDrawer}>Cancel</Button>
+                      <Button variant="contained" className="form-button" type="submit">Submit</Button>
+                    </div>
+                    {
+                      submitResponse && <div className='submit-response'>{submitResponse}</div>
+                    }
+                </form>
+              </div>
+            : 
+            <div className='drawer-upper'>Please select a location</div>
+          }
         </div>
       </Drawer>
     </>
