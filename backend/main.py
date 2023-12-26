@@ -41,6 +41,10 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+@app.get("/")
+async def read_root():
+    return {"message": "Hello, welcome to Karenlist!"}
+
 # CRUD for users
 # CREATE
 @app.post("/users/", status_code=status.HTTP_201_CREATED)
