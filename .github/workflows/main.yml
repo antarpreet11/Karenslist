@@ -6,6 +6,30 @@ on:
       - 'backend/**'  # Run the workflow only when changes are made to the backend directory
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+
+      - name: Build and push Docker image to ECR
+        run: |
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
+          
+          docker build -t ${{ secrets.ECR_REPOSITORY_URI }}:latest backend/
+          
+          docker tag ${{ secrets.ECR_REPOSITORY_URI }}:latest ${{ secrets.ECR_REPOSITORY_URI }}:latest
+          
+          docker push ${{ secrets.ECR_REPOSITORY_URI }}:latest
+
   deploy:
     runs-on: ubuntu-latest
 
