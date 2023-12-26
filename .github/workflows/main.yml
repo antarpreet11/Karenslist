@@ -21,7 +21,7 @@ jobs:
           aws-region: us-east-2
 
       - name: SSH into EC2 and restart container with secret environment variable
-        uses: appleboy/ssh-action@v0.4.0
+        uses: appleboy/ssh-action@latest
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
