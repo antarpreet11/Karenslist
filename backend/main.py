@@ -42,7 +42,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 #Root path
-@app.get("/")
+@app.get("/wassup")
 async def read_root():
     return {"message": "Hello, welcome to Karenlist!"}
 
