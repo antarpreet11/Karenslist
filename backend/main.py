@@ -41,7 +41,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-#Root path
+#Root path for API
 @app.get("/")
 async def read_root():
     return {"message": "Hello, welcome to Karenlist!"}
