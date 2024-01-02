@@ -14,7 +14,9 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_credentials=True,    
     allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 models.Base.metadata.create_all(bind=engine)
@@ -49,14 +51,14 @@ async def read_root():
 
 # CRUD for users
 # CREATE
-@app.post("/users/", status_code=status.HTTP_201_CREATED)
+@app.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserBase, db: db_dependency):
     db_user = models.User(email=user.email, name=user.name, sub=user.sub)
     db.add(db_user)
     db.commit()
 
 # READ
-@app.get("/users/", status_code=status.HTTP_200_OK)
+@app.get("/users", status_code=status.HTTP_200_OK)
 async def read_all_users(db: db_dependency):
     users = db.query(models.User).all()
     if users == []: 
@@ -64,7 +66,7 @@ async def read_all_users(db: db_dependency):
     return users
 
 # READ by email
-@app.get("/users/{email}/", status_code=status.HTTP_200_OK)
+@app.get("/users/{email}", status_code=status.HTTP_200_OK)
 async def read_user(email, db: db_dependency):
     user = db.query(models.User).filter(models.User.email == email).first()
     if user is None: 
@@ -72,7 +74,7 @@ async def read_user(email, db: db_dependency):
     return user
 
 # UPDATE by email
-@app.put("/users/{email}/", status_code=status.HTTP_200_OK)
+@app.put("/users/{email}", status_code=status.HTTP_200_OK)
 async def update_user_name(email, user: UserBase, db: db_dependency):
     db_user = db.query(models.User).filter(models.User.email == email).first()
     if db_user is None: 
@@ -84,7 +86,7 @@ async def update_user_name(email, user: UserBase, db: db_dependency):
     db.commit()
 
 # DELETE by email
-@app.delete("/users/{email}/", status_code=status.HTTP_200_OK)
+@app.delete("/users/{email}", status_code=status.HTTP_200_OK)
 async def delete_user(email, db: db_dependency):
     user = db.query(models.User).filter(models.User.email == email).first()
     if user is None: 
@@ -96,7 +98,7 @@ async def delete_user(email, db: db_dependency):
 
 # CRUD for reviews
 # CREATE   
-@app.post("/reviews/", status_code=status.HTTP_201_CREATED)
+@app.post("/reviews", status_code=status.HTTP_201_CREATED)
 async def create_review(review: ReviewBase, db: db_dependency):
     db_user = db.query(models.User).filter(models.User.email == review.email).first()
 
@@ -108,7 +110,7 @@ async def create_review(review: ReviewBase, db: db_dependency):
     db.commit()
 
 # READ
-@app.get("/reviews/", status_code=status.HTTP_200_OK)
+@app.get("/reviews", status_code=status.HTTP_200_OK)
 async def read_all_reviews(db: db_dependency):
     reviews = db.query(models.Review).all()
     if reviews == []: 
@@ -116,7 +118,7 @@ async def read_all_reviews(db: db_dependency):
     return reviews
 
 # READ by email
-@app.get("/reviews/{email}/", status_code=status.HTTP_200_OK)
+@app.get("/reviews/{email}", status_code=status.HTTP_200_OK)
 async def read_user_reviews(email, db: db_dependency):
     reviews = db.query(models.Review).filter(models.Review.email == email).all()
     if reviews == []: 
@@ -124,7 +126,7 @@ async def read_user_reviews(email, db: db_dependency):
     return reviews
 
 # READ by id
-@app.get("/review/{review_id}/", status_code=status.HTTP_200_OK)
+@app.get("/review/{review_id}", status_code=status.HTTP_200_OK)
 async def read_review(review_id: int, db: db_dependency):
     review = db.query(models.Review).filter(models.Review.id == review_id).first()
     if review is None: 
@@ -132,7 +134,7 @@ async def read_review(review_id: int, db: db_dependency):
     return review
 
 # UPDATE by id
-@app.put("/review/{review_id}/", status_code=status.HTTP_200_OK)
+@app.put("/review/{review_id}", status_code=status.HTTP_200_OK)
 async def update_review(review_id: int, review: ReviewBase, db: db_dependency):
     db_review = db.query(models.Review).filter(models.Review.id == review_id).first()
     if db_review is None: 
@@ -149,7 +151,7 @@ async def update_review(review_id: int, review: ReviewBase, db: db_dependency):
     db.commit()
 
 # DELETE by id 
-@app.delete("/review/{review_id}/", status_code=status.HTTP_200_OK)
+@app.delete("/review/{review_id}", status_code=status.HTTP_200_OK)
 async def delete_review(review_id: int, db: db_dependency):
     review = db.query(models.Review).filter(models.Review.id == review_id).first()
     if review is None: 
