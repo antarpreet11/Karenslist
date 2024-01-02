@@ -47,28 +47,6 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-#Options for CORS
-@app.middleware("http")
-async def options_middleware(request: Request, call_next):
-    if request.method == "OPTIONS":
-        logging.debug(f"Handling OPTIONS request for path: {request.url.path}")
-        response = await call_next(request)
-        logging.debug(f"Headers in response: {response.headers}")
-        return response
-    return await call_next(request)
-
-@app.options("/users", tags=["users"])
-def options_users():
-    return {}
-
-@app.options("/reviews", tags=["reviews"])
-def options_reviews():
-    return {}
-
-@app.options("/review", tags=["review"])
-def options_review():
-    return {}
-
 #Root path
 @app.get("/")
 async def read_root():
