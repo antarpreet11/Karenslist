@@ -5,7 +5,7 @@ const axios = require('axios');
 module.exports = async (req, res) => {
   try {
     const apiUrl = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, ''); // Remove trailing slash if present
-    const apiPath = req.url? req.url : '/';
+    const apiPath = req.url ? req.url.replace(/^\/api\/proxy/, '') : '/';
 
     console.log('API URL:', apiUrl);
     console.log('API Path:', apiPath);
@@ -22,6 +22,10 @@ module.exports = async (req, res) => {
     res.status(axiosResponse.status).json(axiosResponse.data);
   } catch (error) {
     console.error('Error proxying request:', error);
+    if (error.response) {
+      console.error('Error Response:', error.response.data);
+      console.error('Error Status:', error.response.status);
+    }
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
