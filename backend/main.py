@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status, Depends
+from fastapi import FastAPI, HTTPException, status, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Annotated
@@ -45,6 +45,12 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 #Option for CORS
+@app.middleware("http")
+async def options_middleware(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+    return await call_next(request)
+
 @app.options("/users", tags=["users"])
 def options_users():
     return {}
