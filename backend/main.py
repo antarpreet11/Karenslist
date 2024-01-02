@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 app = FastAPI()
 origins = [
     "http://localhost:3000",
+    "https://karenslist.vercel.app"
 ]
 app.add_middleware(
     CORSMiddleware,
