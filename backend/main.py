@@ -5,6 +5,9 @@ from typing import Annotated
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = FastAPI()
 origins = [
@@ -48,7 +51,10 @@ db_dependency = Annotated[Session, Depends(get_db)]
 @app.middleware("http")
 async def options_middleware(request: Request, call_next):
     if request.method == "OPTIONS":
-        return await call_next(request)
+        logging.debug(f"Handling OPTIONS request for path: {request.url.path}")
+        response = await call_next(request)
+        logging.debug(f"Headers in response: {response.headers}")
+        return response
     return await call_next(request)
 
 @app.options("/users", tags=["users"])
