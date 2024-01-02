@@ -48,9 +48,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
       
-      - name: Regenerate Docker Login Token
-        run: aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-2.amazonaws.com
-
       - name: SSH into EC2 and restart container with secret environment variable
         uses: appleboy/ssh-action@master
         with:
