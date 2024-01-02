@@ -7,12 +7,14 @@ module.exports = async (req, res) => {
     const apiUrl = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, ''); // Remove trailing slash if present
     const apiPath = req.url ? req.url.replace(/^\/api\/proxy/, '') : '/'; // Remove leading /api/proxy if present
 
+    const formattedApiPath = apiPath.startsWith('/') ? apiPath : `/${apiPath}`;
+
     console.log('API URL:', apiUrl);
-    console.log('API Path:', apiPath);
+    console.log('Formatted API Path:', formattedApiPath);
 
     const axiosResponse = await axios({
       method: req.method,
-      url: apiUrl + apiPath,
+      url: apiUrl + formattedApiPath,
       headers: {
         'Content-Type': 'application/json',
       },
