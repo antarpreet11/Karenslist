@@ -5,7 +5,10 @@ const axios = require('axios');
 module.exports = async (req, res) => {
   try {
     const apiUrl = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, ''); // Remove trailing slash if present
-    const apiPath = req.url;
+    const apiPath = req.url? req.url : '/';
+
+    console.log('API URL:', apiUrl);
+    console.log('API Path:', apiPath);
 
     const axiosResponse = await axios({
       method: req.method,
