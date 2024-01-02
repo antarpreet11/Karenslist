@@ -1,3 +1,6 @@
+env:
+  ACTIONS_STEP_DEBUG: true
+
 name: Deploy to EC2
 
 on:
