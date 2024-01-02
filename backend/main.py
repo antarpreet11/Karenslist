@@ -47,7 +47,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-#Option for CORS
+#Options for CORS
 @app.middleware("http")
 async def options_middleware(request: Request, call_next):
     if request.method == "OPTIONS":

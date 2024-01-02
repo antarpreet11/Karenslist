@@ -58,6 +58,6 @@ jobs:
             docker stop karenslist-app
             docker rm karenslist-app
             docker pull ${{ secrets.ECR_REPOSITORY_URI }}:latest
-            docker run -d -p 8000:8000 --name karenslist-app \
+            docker run -t -p 8000:8000 --name karenslist-app \
               -e URL_DATABASE="${{ secrets.URL_DATABASE }}" \
               ${{ secrets.ECR_REPOSITORY_URI }}:latest
