@@ -16,7 +16,7 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,    
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["Accept", "Accept-Language", "Content-Language", "Content-Type"]
 )
 
 models.Base.metadata.create_all(bind=engine)
@@ -43,6 +43,19 @@ def get_db():
         db.close()
 
 db_dependency = Annotated[Session, Depends(get_db)]
+
+#Option for CORS
+@app.options("/users", tags=["users"])
+def options_users():
+    return {}
+
+@app.options("/reviews", tags=["reviews"])
+def options_reviews():
+    return {}
+
+@app.options("/review", tags=["review"])
+def options_review():
+    return {}
 
 #Root path
 @app.get("/")
