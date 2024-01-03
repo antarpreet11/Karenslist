@@ -47,7 +47,7 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-#Root path for API
+#Root path 
 @app.get("/")
 async def read_root():
     logging.debug("Received a request to the root path.")
