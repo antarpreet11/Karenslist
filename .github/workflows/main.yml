@@ -51,9 +51,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      - name: Debugging Statement 1
-        run: echo "Debugging - Before SSH into EC2"
-
       - name: SSH into EC2 and restart container with secret environment variable
         uses: appleboy/ssh-action@master
         with:
@@ -65,10 +62,8 @@ jobs:
             docker stop karenslist-app
             docker rm karenslist-app
             docker pull ${{ secrets.ECR_REPOSITORY_URI }}:latest
-            docker run -t -p 8000:8000 --name karenslist-app \
+            docker run -d -p 8000:8000 --name karenslist-app \
               -e URL_DATABASE="${{ secrets.URL_DATABASE }}" \
               ${{ secrets.ECR_REPOSITORY_URI }}:latest
-
-      - name: Debugging Statement 2
-        run: echo "Debugging - After SSH into EC2"
+            echo "Debugging: After running Docker commands"
 
