@@ -7,8 +7,8 @@ from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 import logging
 
-app = FastAPI()
 logging.basicConfig(level=logging.DEBUG)
+app = FastAPI()
 
 origins = [
     "http://localhost:3000",
