@@ -5,8 +5,11 @@ from typing import Annotated
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
+import logging
 
 app = FastAPI()
+logging.basicConfig(level=logging.DEBUG)
+
 origins = [
     "http://localhost:3000",
     "https://karenslist.vercel.app"
