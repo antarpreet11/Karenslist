@@ -13,14 +13,23 @@ module.exports = async (req, res) => {
     console.log('API URL:', apiUrl);
     console.log('Formatted API Path:', formattedApiPath);
 
+    // Handle OPTIONS preflight requests
+    if (req.method === 'OPTIONS') {
+      // Respond to preflight requests
+      res.status(200).end();
+      return;
+    }
+
     const axiosResponse = await axios({
       method: req.method,
       url: apiUrl + formattedApiPath,
       headers: {
         'Content-Type': 'application/json',
       },
-      data: req.method === 'POST' ? req.body : undefined,
+      data: ['POST', 'PUT'].includes(req.method) ? req.body : undefined,
     });
+
+    console.log('Axios Response:', axiosResponse);
 
     res.status(axiosResponse.status).json(axiosResponse.data);
   } catch (error) {
