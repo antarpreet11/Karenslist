@@ -6,8 +6,9 @@ module.exports = async (req, res) => {
   try {
     const apiUrl = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, ''); // Remove trailing slash if present
     const apiPath = req.url ? req.url.replace(/^\/api\/proxy/, '') : '/'; // Remove leading /api/proxy if present
-
-    const formattedApiPath = apiPath.startsWith('/') ? apiPath : `/${apiPath}`;
+    
+    let formattedApiPath = apiPath.startsWith('/') ? apiPath : `/${apiPath}`;
+    formattedApiPath = formattedApiPath.endsWith('/') ? formattedApiPath.slice(0, -1) : formattedApiPath; // Remove trailing slash
 
     console.log('API URL:', apiUrl);
     console.log('Formatted API Path:', formattedApiPath);
