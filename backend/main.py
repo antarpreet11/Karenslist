@@ -47,7 +47,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 #Root path for testing
 @app.get("/")
 async def read_root():
-    return {"message": "Hello, Karen!"}
+    return {"message": "Hello, Karens!"}
 
 # CRUD for users
 # CREATE
