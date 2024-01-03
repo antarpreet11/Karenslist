@@ -50,6 +50,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 #Root path for API
 @app.get("/")
 async def read_root():
+    logging.debug("Received a request to the root path.")
     return {"message": "Hello, Karens!"}
 
 # CRUD for users
@@ -63,6 +64,7 @@ async def create_user(user: UserBase, db: db_dependency):
 # READ
 @app.get("/users", status_code=status.HTTP_200_OK)
 async def read_all_users(db: db_dependency):
+    logging.debug("Received a request to the users path.")
     users = db.query(models.User).all()
     if users == []: 
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"No users found")
